@@ -1,13 +1,13 @@
 
 if (WIN32)
-    cmake_minimum_required(VERSION 3.18)
+    cmake_minimum_required(VERSION 3.13)
 else()
     # If you're using Ubuntu 18.04, we suggest you install the latest
     # CMake from the official repository https://apt.kitware.com/.
     # CMake 3.17+ is required to allow linking with OBJECT libraries,
     # to prevent erroneous -gencode option deduplication with CUDA,
     # and to simplify generator expressions for selecting compile flags.
-    cmake_minimum_required(VERSION 3.17)
+    cmake_minimum_required(VERSION 3.13)
 endif()
 
 set (CMAKE_OSX_DEPLOYMENT_TARGET "10.9" CACHE STRING
@@ -20,7 +20,7 @@ option(BUILD_UNIT_TESTS           "Build Open3D unit tests"                  OFF
 option(BUILD_BENCHMARKS           "Build the micro benchmarks"               OFF)
 option(BUILD_PYTHON_MODULE        "Build the python module"                  ON )
 option(BUILD_CUDA_MODULE          "Build the CUDA module"                    OFF)
-option(BUILD_CACHED_CUDA_MANAGER  "Build the cached CUDA memory manager"     ON )
+option(BUILD_CACHED_CUDA_MANAGER  "Build the cached CUDA memory manager"     OFF )
 option(BUILD_GUI                  "Builds new GUI"                           ON )
 option(BUILD_JUPYTER_EXTENSION    "Enable Jupyter support for Open3D"        OFF)
 option(WITH_OPENMP                "Use OpenMP multi-threading"               ON )
@@ -45,8 +45,8 @@ option(USE_SYSTEM_QHULL           "Use system pre-installed qhull"           OFF
 option(USE_SYSTEM_TINYGLTF        "Use system pre-installed tinygltf"        OFF)
 option(USE_SYSTEM_TINYOBJLOADER   "Use system pre-installed tinyobjloader"   OFF)
 option(BUILD_FILAMENT_FROM_SOURCE "Build filament from source"               OFF)
-option(PREFER_OSX_HOMEBREW        "Prefer Homebrew libs over frameworks"     ON )
-option(WITH_FAISS                 "Enable Faiss"                             ON )
+option(PREFER_OSX_HOMEBREW        "Prefer Homebrew libs over frameworks"     OFF )
+option(WITH_FAISS                 "Enable Faiss"                             OFF )
 
 # Sensor options
 option(BUILD_LIBREALSENSE         "Build support for Intel RealSense camera" OFF)
@@ -83,8 +83,8 @@ set(CUDA_ARCH_USER "" CACHE STRING "User defined list of GPU architectures, e.g.
 
 # Default build type
 if(NOT CMAKE_BUILD_TYPE)
-    message(STATUS "No CMAKE_BUILD_TYPE specified, default to RelWithDebInfo")
-    set(CMAKE_BUILD_TYPE "RelWithDebInfo")
+    message(STATUS "No CMAKE_BUILD_TYPE specified, default to Release")
+    set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 # Set OpenGL policy
@@ -177,6 +177,7 @@ endif()
 
 # Set BLAS/LAPACK library preference.
 if(LINUX_AARCH64)
+  message(STATUS "***********")
     if(NOT USE_BLAS)
         set(USE_BLAS ON)
         message(WARNING "ARM CPU detected, setting USE_BLAS=ON.")
